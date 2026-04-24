@@ -1,2 +1,2 @@
-# au-ai-tool-
+# au-ai-tool
 AI tool workshop starter
