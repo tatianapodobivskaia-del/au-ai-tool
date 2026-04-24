@@ -73,10 +73,29 @@
       z-index: 1;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto auto 1fr auto; /* prototype banner / header / chat / input */
       max-width: 820px;
       margin: 0 auto;
       padding: 32px 24px 24px;
+    }
+
+    /* ── Prototype banner (subtle disclaimer at the top) ── */
+    .prototype-banner {
+      text-align: center;
+      padding-bottom: 16px;
+    }
+    .prototype-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.02);
     }
 
     /* ── Header ───────────────────────────────────── */
@@ -470,6 +489,14 @@
   <div class="app">
 
     <!-- ══════════════════════════════════════════════
+         PROTOTYPE BANNER
+         Subtle disclaimer visible at the top of every page.
+         ══════════════════════════════════════════════ -->
+    <div class="prototype-banner" id="prototypeBanner">
+      <span class="prototype-badge">ACADEMIC RESEARCH PROTOTYPE</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
          HEADER
          🎨 CUSTOMIZE: Your tool's name, tagline, and
          the "Back" link destination.
@@ -518,9 +545,7 @@
         <button class="send-btn" id="sendBtn" onclick="send()">Send</button>
       </div>
       <div class="footer">
-        <!-- 🎨 CUSTOMIZE: Your name and GitHub username -->
-        Made by <a href="https://github.com/YOUR-USERNAME" target="_blank">YOUR-NAME</a>
-        · Atlantis University · Master in AI
+        Made by Tatiana Podobivskaia · Atlantis University · MBA Student · Academic Research Prototype
       </div>
     </div>
   </div>
@@ -663,10 +688,12 @@ When a student first brings up a topic, open by asking what they already know or
     gsap.set(['#header', '#chat', '#inputArea'], { opacity: 0, y: 20 });
     gsap.set('#settingsBtn', { opacity: 0, scale: 0.8 });
     gsap.set('#modeBadge', { opacity: 0 });
+    gsap.set('#prototypeBanner', { opacity: 0, y: -8 });
 
     const loadTl = gsap.timeline({ defaults: { ease: 'back.out(1.4)' } });
     loadTl
-      .to('#header', { opacity: 1, y: 0, duration: 0.6 })
+      .to('#prototypeBanner', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
+      .to('#header', { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
       .to('#modeBadge', { opacity: 1, duration: 0.4 }, '-=0.3')
       .to('#settingsBtn', { opacity: 1, scale: 1, duration: 0.5 }, '-=0.4')
       .to('#chat', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
