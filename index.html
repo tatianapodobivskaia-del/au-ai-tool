@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- 🎨 CUSTOMIZE: Change the browser tab title to match your tool -->
-  <title>My AI Tool · Built at Atlantis University</title>
+  <title>Socratic Tutor · Built at Atlantis University</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,8 +24,8 @@
        Change these CSS variables to re-theme the whole app.
        ═══════════════════════════════════════════════════ */
     :root {
-      /* Atlantis University brand */
-      --au-coral:    #F74E53;   /* Primary accent */
+      /* Socratic Tutor palette */
+      --au-purple:   #7C3AED;   /* Primary accent (deep purple) */
       --au-teal:     #26C0BB;   /* Secondary accent */
 
       /* Dark UI palette */
@@ -62,7 +62,7 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 0%, rgba(247, 78, 83, 0.08), transparent 50%),
+        radial-gradient(ellipse at 20% 0%, rgba(124, 58, 237, 0.10), transparent 50%),
         radial-gradient(ellipse at 80% 100%, rgba(38, 192, 187, 0.06), transparent 50%);
       pointer-events: none;
       z-index: 0;
@@ -98,7 +98,7 @@
     }
     .brand h1 .accent {
       font-style: italic;
-      color: var(--au-coral);
+      color: var(--au-purple);
     }
     .brand p {
       margin-top: 8px;
@@ -170,9 +170,9 @@
       perspective: 400px;
     }
     .mode-badge.demo {
-      background: rgba(247, 78, 83, 0.1);
-      color: var(--au-coral);
-      border: 1px solid rgba(247, 78, 83, 0.3);
+      background: rgba(124, 58, 237, 0.12);
+      color: var(--au-purple);
+      border: 1px solid rgba(124, 58, 237, 0.35);
     }
     .mode-badge.live {
       background: rgba(38, 192, 187, 0.1);
@@ -240,7 +240,7 @@
       text-align: left;
     }
     .prompt-chip:hover {
-      border-color: var(--au-coral);
+      border-color: var(--au-purple);
       background: var(--surface-2);
       transform: translateY(-1px);
     }
@@ -260,7 +260,7 @@
       gap: 8px;
     }
     .message.user .message-role { color: var(--au-teal); }
-    .message.assistant .message-role { color: var(--au-coral); }
+    .message.assistant .message-role { color: var(--au-purple); }
 
     .message-body {
       font-size: 15px;
@@ -289,7 +289,7 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--au-coral);
+      background: var(--au-purple);
       opacity: 0.5;
     }
 
@@ -327,7 +327,7 @@
     textarea::placeholder { color: var(--text-dim); }
 
     .send-btn {
-      background: var(--au-coral);
+      background: var(--au-purple);
       border: none;
       color: white;
       padding: 10px 18px;
@@ -340,7 +340,7 @@
       white-space: nowrap;
     }
     .send-btn:hover:not(:disabled) {
-      background: #e53e43;
+      background: #6D28D9;
       transform: translateY(-1px);
     }
     .send-btn:disabled {
@@ -481,8 +481,8 @@
         <a href="../" class="back-link">
           <span class="arrow">←</span> Back
         </a>
-        <h1>My <span class="accent">AI Tool</span></h1>
-        <p>Built with <span class="teal">Claude</span> · Hosted on GitHub Pages</p>
+        <h1>Socratic <span class="accent">Tutor</span></h1>
+        <p>A <span class="teal">thinking partner</span> for university students</p>
         <span id="modeBadge" class="mode-badge demo">
           <span class="dot"></span> Demo Mode
         </span>
@@ -497,8 +497,8 @@
          ══════════════════════════════════════════════ -->
     <main class="chat" id="chat">
       <div class="welcome" id="welcome">
-        <div class="welcome-title">Ready when you are.</div>
-        <p>Pick a starter below or type your own question.</p>
+        <div class="welcome-title">What shall we think about?</div>
+        <p>Pick a starter below, or tell me what you are working on.</p>
         <div class="suggested-prompts" id="suggestedPrompts"></div>
       </div>
     </main>
@@ -510,7 +510,7 @@
       <div class="input-wrap">
         <textarea
           id="input"
-          placeholder="Ask me anything..."
+          placeholder="Tell me what you're working on..."
           rows="1"
           onkeydown="handleKey(event)"
           oninput="autoGrow(this)"
@@ -559,25 +559,38 @@
     const CONFIG = {
       // The personality and purpose of your AI. Be specific!
       // This is the single most important setting.
-      systemPrompt: `You are a helpful assistant. Answer questions clearly and concisely. Be friendly but professional. If you don't know something, say so.`,
+      systemPrompt: `You are a Socratic tutor for university students. Your role is to help students think through their coursework, problems, and ideas by guiding them with questions, never by giving direct answers.
+
+Core rules you must follow:
+- Never give direct answers, solutions, facts, definitions, or explanations. Your job is to guide, not to tell.
+- Respond with thoughtful, open-ended questions that help the student reach understanding on their own.
+- Ask one main question at a time so the student can focus and actually think about it.
+- Build on what the student just said. Each question should push their thinking one step further than the last.
+- When a student is stuck, do not rescue them. Ask a simpler sub-question that breaks the problem into a smaller piece they can handle.
+- If a student insists on a direct answer, kindly remind them that discovering it themselves is the goal, and offer a question that moves them closer.
+- When a student arrives at something correct, briefly acknowledge the good thinking (for example, "Yes, that is exactly the right move") and then ask the next question.
+- Avoid yes/no questions unless you are testing a specific assumption. Favor questions starting with "what," "why," "how," and "what would happen if."
+- Be warm, patient, and curious. You are their thinking partner, not their lecturer.
+
+When a student first brings up a topic, open by asking what they already know or believe about it, or what part specifically is confusing them. Do not start asking questions about the topic itself until you understand where their thinking currently stands.`,
 
       // Suggested prompts shown as clickable chips on the welcome screen.
       suggestedPrompts: [
-        "What can you help me with?",
-        "Explain something complex simply.",
-        "Give me an idea for a project."
+        "Help me understand a concept from class",
+        "I'm stuck on a problem set",
+        "Walk me through an essay I'm writing"
       ],
 
       // Placeholder text in the input box
-      inputPlaceholder: "Ask me anything...",
+      inputPlaceholder: "Tell me what you're working on...",
 
       // Demo mode fallbacks — used when no API key is set.
       // So visitors without a key still see a working product.
       demoResponses: [
-        "👋 I'm running in demo mode right now. To enable real AI responses, click Settings (top-right) and add your Anthropic API key. Get one at console.anthropic.com.",
-        "This is a starter app built for a Git & GitHub workshop at Atlantis University. Add an API key in Settings to make me fully functional!",
-        "In demo mode, I give fixed replies. With an API key, I'm powered by Claude and answer anything you ask. Try it!",
-        "You found demo mode! This starter shows how AI tools get built, versioned with Git, and deployed. Add a key in Settings to go live."
+        "👋 I'm running in demo mode right now, so instead of asking you real guiding questions, I'm returning a fixed message. To unlock the real Socratic tutor, click Settings (top-right) and add your Anthropic API key. Get one at console.anthropic.com.",
+        "Demo mode here. To get real Socratic dialogue powered by Claude, add your API key in Settings. Until then, I'll keep returning canned messages like this one.",
+        "This is a classroom starter app, a Socratic tutor that teaches by asking, never by telling. Add an API key in Settings to make me fully functional, and I'll start asking you real guiding questions.",
+        "You found demo mode! With an API key added in Settings, I become a real Socratic thinking partner: every reply would be a question that pushes your thinking one step further."
       ],
 
       // Technical settings — usually fine as-is
